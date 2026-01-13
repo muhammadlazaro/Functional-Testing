@@ -27,7 +27,7 @@ jobs:
             --network=host \
             --shm-size="2g" \
             selenium/standalone-firefox
-            
+
       - name: Wait Selenium Server
         run: sleep 10
 
@@ -44,3 +44,9 @@ jobs:
 
       - name: Run test AUT
         run: python tests/hello_aut.py
+
+      - name: Upload screenshots as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-screenshots
+          path: screenshots/

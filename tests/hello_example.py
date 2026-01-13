@@ -1,21 +1,24 @@
 import unittest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import os
 
-class GoogleTestCase(unittest.TestCase):
+class ExampleTest(unittest.TestCase):
 
     def setUp(self):
         options = webdriver.FirefoxOptions()
-        options.add_argument('--ignore-ssl-errors=yes')
-        options.add_argument('--ignore-certificate-errors')
+        options.add_argument('--headless')
 
         self.driver = webdriver.Remote(
-            command_executor='http://localhost:4444/wd/hub',
+            command_executor="http://localhost:4444",
             options=options
         )
 
-    def test_open_example(self):
+        os.makedirs("screenshots", exist_ok=True)
+
+    def test_example(self):
         self.driver.get("https://example.com")
+        self.driver.save_screenshot("screenshots/example.png")
         self.assertIn("Example Domain", self.driver.title)
 
     def tearDown(self):
