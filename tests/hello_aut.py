@@ -1,28 +1,37 @@
-import unittest
+import unittest, sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-class AUTTestCase(unittest.TestCase):
+class AutTest(unittest.TestCase):
 
     def setUp(self):
         options = webdriver.FirefoxOptions()
         options.add_argument('--ignore-ssl-errors=yes')
         options.add_argument('--ignore-certificate-errors')
 
-        self.driver = webdriver.Remote(
-            command_executor='http://localhost:4444/wd/hub',
+        # Selenium container name
+        server = "http://selenium:4444"
+
+        self.browser = webdriver.Remote(
+            command_executor=server,
             options=options
         )
+        self.addCleanup(self.browser.quit)
 
-    def test_open_aut_home(self):
-        # Akses AUT
-        self.driver.get("http://host.docker.internal:8080")
+    def test_homepage(self):
+        # AUT container name
+        url = "http://aut"
 
-        # Validasi teks khas AUT
-        self.assertIn("Welcome back", self.driver.page_source)
+        self.browser.get(url)
 
-    def tearDown(self):
-        self.driver.quit()
+        expected_result = "Welcome back, Guest!"
+        actual_result = self.browser.find_element(By.TAG_NAME, 'p')
+
+        self.assertIn(expected_result, actual_result.text)
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(
+        argv=['first-arg-is-ignored'],
+        verbosity=2,
+        warnings='ignore'
+    )
