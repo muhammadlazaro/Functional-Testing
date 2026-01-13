@@ -41,3 +41,6 @@ jobs:
 
       - name: Run test example.com
         run: python tests/hello_example.py
+
+      - name: Run test AUT
+        run: python tests/hello_aut.py
