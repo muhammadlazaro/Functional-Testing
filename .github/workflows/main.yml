@@ -18,5 +18,9 @@ jobs:
       - name: Run Container
         run: docker run -d -p 8080:80 aut-app
 
+      - name: Wait for server
+        run: sleep 10
+
       - name: Test URL
         run: curl http://localhost:8080
+
