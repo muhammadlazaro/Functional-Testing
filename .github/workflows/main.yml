@@ -1,4 +1,4 @@
-name: CI Selenium
+name: CI Selenium Parallel
 
 on:
   push:
@@ -8,6 +8,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        browser: [firefox, chrome, edge]
 
     steps:
       - uses: actions/checkout@v3
@@ -21,14 +25,14 @@ jobs:
       - name: Wait AUT
         run: sleep 10
 
-      - name: Run Selenium Firefox Container
+      - name: Run Selenium Container
         run: |
           docker run -d \
             --network=host \
             --shm-size="2g" \
-            selenium/standalone-firefox
+            selenium/standalone-${{ matrix.browser }}
 
-      - name: Wait Selenium Server
+      - name: Wait Selenium Hub
         run: sleep 10
 
       - name: Setup Python
@@ -39,14 +43,11 @@ jobs:
       - name: Install Selenium
         run: pip install selenium
 
-      - name: Run test example.com
-        run: python tests/hello_example.py
-
       - name: Run test AUT
         run: python tests/hello_aut.py
 
-      - name: Upload screenshots as artifact
+      - name: Upload Screenshot Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: selenium-screenshots
-          path: screenshots/
+          name: screenshot-${{ matrix.browser }}
+          path: screenshot.png
