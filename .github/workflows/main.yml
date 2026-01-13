@@ -32,3 +32,7 @@ jobs:
 
       - name: Run Selenium Test
         run: python selenium/test_open_page.py
+
+      - name: Run test example.com
+        run: python tests/hello_example.py
+
