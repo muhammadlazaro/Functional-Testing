@@ -1,4 +1,4 @@
-import unittest, sys
+import unittest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -9,20 +9,16 @@ class AutTest(unittest.TestCase):
         options.add_argument('--ignore-ssl-errors=yes')
         options.add_argument('--ignore-certificate-errors')
 
-        # Selenium container name
-        server = "http://selenium:4444"
-
+        # Selenium diakses dari HOST
         self.browser = webdriver.Remote(
-            command_executor=server,
+            command_executor="http://localhost:4444",
             options=options
         )
         self.addCleanup(self.browser.quit)
 
     def test_homepage(self):
-        # AUT container name
-        url = "http://aut"
-
-        self.browser.get(url)
+        # AUT diakses dari HOST
+        self.browser.get("http://localhost:8080")
 
         expected_result = "Welcome back, Guest!"
         actual_result = self.browser.find_element(By.TAG_NAME, 'p')
