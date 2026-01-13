@@ -18,7 +18,17 @@ jobs:
       - name: Run AUT
         run: docker run -d -p 8080:80 aut-app
 
-      - name: Wait for server
+      - name: Wait AUT
+        run: sleep 10
+
+      - name: Run Selenium Firefox Container
+        run: |
+          docker run -d \
+            -p 4444:4444 \
+            --shm-size="2g" \
+            selenium/standalone-firefox
+
+      - name: Wait Selenium Server
         run: sleep 10
 
       - name: Setup Python
@@ -27,12 +37,7 @@ jobs:
           python-version: '3.10'
 
       - name: Install Selenium
-        run: |
-          pip install selenium webdriver-manager
-
-      - name: Run Selenium Test
-        run: python selenium/test_open_page.py
+        run: pip install selenium
 
       - name: Run test example.com
         run: python tests/hello_example.py
-
