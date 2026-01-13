@@ -16,7 +16,7 @@ class AUTTestCase(unittest.TestCase):
 
     def test_open_aut_home(self):
         # Akses AUT
-        self.driver.get("http://localhost:8080")
+        self.driver.get("http://host.docker.internal:8080")
 
         # Validasi teks khas AUT
         self.assertIn("Welcome back", self.driver.page_source)
